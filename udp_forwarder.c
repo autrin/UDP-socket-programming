@@ -23,7 +23,7 @@
 #include <unistd.h>
 
 #define PORT 4890
-
+#define BUFFER_SIZE 4096
 /* main
  * The main entry point of your program */
 int main(int argc, char **argv)
@@ -56,6 +56,25 @@ int main(int argc, char **argv)
 
     struct sockaddr_in client_addr;
     socklen_t client_addr_len = sizeof(client_addr);
+    char buffer[BUFFER_SIZE];
 
+    ssize_t num_read_bytes;
+    while(1){
+        num_read_bytes = recvfrom(sock_fd, buffer, BUFFER_SIZE - 1, 0, (struct sockaddr*)&client_addr, &client_addr_len);
+        if(num_read_bytes < 0){
+            perror("Error reading from socket");
+            close(sock_fd);
+            exit(1);
+        }
+        printf("Received %ld bytes\n", num_read_bytes);
+
+        // ssize_t num_sent_bytes = sendto(sock_fd, buffer, num_read_bytes, 0, (struct sockaddr*)&client_addr, client_addr_len);
+        // if(num_sent_bytes < 0){
+        //     perror("Error sending to socket");
+        //     close(sock_fd);
+        //     exit(1);
+        // }
+        // printf("Sent %ld bytes\n", num_sent_bytes);
+    }
     return 0;
 }
