@@ -4,15 +4,29 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <string.h>
+#include <signal.h>
 
 #define PORT 4890
 #define BUFFER_SIZE 4096
 #define MESSAGE "Hello from server! I received your message."
+
+int sock_fd;
+
+void handle_sigint(int sig) { // check for ctrl + c to close the socket and exit cleanly
+    printf("Caught signal %d\n", sig);
+    close(sock_fd);
+    printf("Socket closed. Exiting...\n");
+    exit(0);
+}
+
 /* main
  * The main entry point of your program */
 int main(int argc, char *argv[])
 {
-    int sock_fd = socket(PF_INET, SOCK_DGRAM, 0); // create a datagram socket (udp)
+    // Register signal handler
+    signal(SIGINT, handle_sigint);
+
+    sock_fd = socket(PF_INET, SOCK_DGRAM, 0); // create a datagram socket (udp)
     if(sock_fd < 0)
     {
         perror("Error creating socket");
