@@ -26,7 +26,7 @@
 #define BUFFER_SIZE 4096
 /* main
  * The main entry point of your program */
-int main(int argc, char **argv)
+int main(int argc, char *argv[])
 {
     if(argc != 6)
     {
