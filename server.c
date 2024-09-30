@@ -7,6 +7,7 @@
 
 #define PORT 4890
 #define BUFFER_SIZE 4096
+#define MESSAGE "Hello from server! I received your message."
 /* main
  * The main entry point of your program */
 int main(int argc, char *argv[])
@@ -33,26 +34,29 @@ int main(int argc, char *argv[])
 
     struct sockaddr_in client_addr;
     socklen_t client_addr_len = sizeof(client_addr);
-    char buffer[BUFFER_SIZE];
-
+    char receivedMessage[BUFFER_SIZE];
+    char sentMessage[BUFFER_SIZE];
     ssize_t num_read_bytes;
     while(1){
-        num_read_bytes = recvfrom(sock_fd, buffer, BUFFER_SIZE - 1, 0, (struct sockaddr*)&client_addr, &client_addr_len);
+        num_read_bytes = recvfrom(sock_fd, receivedMessage, BUFFER_SIZE - 1, 0, (struct sockaddr*)&client_addr, &client_addr_len);
         if(num_read_bytes < 0){
             perror("Error reading from socket");
             close(sock_fd);
             exit(1);
         }
         printf("Received %ld bytes\n", num_read_bytes);
-        buffer[num_read_bytes] = '\0';
-        printf("Message read from client: %s\n", buffer);
-        // ssize_t num_sent_bytes = sendto(sock_fd, buffer, num_read_bytes, 0, (struct sockaddr*)&client_addr, client_addr_len);
-        // if(num_sent_bytes < 0){
-        //     perror("Error sending to socket");
-        //     close(sock_fd);
-        //     exit(1);
-        // }
-        // printf("Sent %ld bytes\n", num_sent_bytes);
+        receivedMessage[num_read_bytes] = '\0';
+        printf("Message read from client: %s\n", receivedMessage);
+        
+        ssize_t num_sent_bytes = sendto(sock_fd, MESSAGE, strlen(MESSAGE), 0, (struct sockaddr*)&client_addr, client_addr_len);
+        if(num_sent_bytes < 0){
+            perror("Error sending to socket");
+            close(sock_fd);
+            exit(1);
+        }
+        printf("Sent %ld bytes\n", num_sent_bytes);
+        MESSAGE[num_sent_bytes] = '\0';
+        printf("Message sent to client: %s\n", MESSAGE);
     }
     return 0;
 }
