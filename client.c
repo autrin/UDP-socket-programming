@@ -24,6 +24,11 @@ int main(int argc, char* argv[]){
     server_addr.sin_port = htons(SERVER_PORT);
 
     int byte_sent = sendto(sock_fd, MESSAGE, strlen(MESSAGE), 0, (struct sockaddr *)&server_addr, sizeof(server_addr));
-    
+    if(byte_sent < 0){
+        perror("Error sending message");
+        close(sock_fd);
+        return 1;
+    }
+    printf("Sent %d bytes\n", byte_sent);
     return 0;
 }
