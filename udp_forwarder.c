@@ -22,6 +22,8 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 
+#define PORT 4890
+
 /* main
  * The main entry point of your program */
 int main(int argc, char **argv)
@@ -33,6 +35,17 @@ int main(int argc, char **argv)
     }
     
     int sock_fd = socket(PF_INET, SOCK_DGRAM, 0); // create a datagram socket (udp)
+    if(sock_fd < 0)
+    {
+        perror("Error creating socket");
+        return 1;
+    }
+    printf("Socket created\n");
 
+    struct sockaddr_in server_addr;
+    server_addr.sin_family = AF_INET;
+    server_addr.sin_addr.s_addr = INADDR_ANY;
+    server_addr.sin_port = htons(PORT);
+    
     return 0;
 }
