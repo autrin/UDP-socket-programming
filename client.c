@@ -23,5 +23,7 @@ int main(int argc, char* argv[]){
     server_addr.sin_addr.s_addr = inet_addr(SERVER_IP);
     server_addr.sin_port = htons(SERVER_PORT);
 
+    int byte_sent = sendto(sock_fd, MESSAGE, strlen(MESSAGE), 0, (struct sockaddr *)&server_addr, sizeof(server_addr));
+    
     return 0;
 }
