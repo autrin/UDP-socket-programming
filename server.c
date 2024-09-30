@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
     struct sockaddr_in client_addr;
     socklen_t client_addr_len = sizeof(client_addr);
     char receivedMessage[BUFFER_SIZE];
-    char sentMessage[BUFFER_SIZE];
+    
     ssize_t num_read_bytes;
     while(1){
         num_read_bytes = recvfrom(sock_fd, receivedMessage, BUFFER_SIZE - 1, 0, (struct sockaddr*)&client_addr, &client_addr_len);

@@ -30,5 +30,17 @@ int main(int argc, char* argv[]){
         return 1;
     }
     printf("Sent %d bytes\n", byte_sent);
+    printf("Message sent to server: %s\n", MESSAGE);
+
+    char receivedMessage[BUFFER_SIZE];
+    ssize_t num_read_bytes = recvfrom(sock_fd, receivedMessage, BUFFER_SIZE - 1, 0, (struct sockaddr *)&server_addr, &server_addr_len);
+    if(num_read_bytes < 0){
+        perror("Error reading from socket");
+        close(sock_fd);
+        return 1;
+    }
+    receivedMessage[num_read_bytes] = '\0';
+    printf("Received %ld bytes\n", num_read_bytes);
+    printf("Message read from server: %s\n", receivedMessage);
     return 0;
 }
