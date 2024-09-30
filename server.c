@@ -55,7 +55,6 @@ int main(int argc, char *argv[])
             exit(1);
         }
         printf("Sent %ld bytes\n", num_sent_bytes);
-        MESSAGE[num_sent_bytes] = '\0';
         printf("Message sent to client: %s\n", MESSAGE);
     }
     return 0;
