@@ -47,12 +47,15 @@ int main(int argc, char **argv)
     server_addr.sin_addr.s_addr = INADDR_ANY;
     server_addr.sin_port = htons(PORT);
 
-    if(bind(sock_fd, (struct sockaddr*)&server_addr, sizeof(server_addr)) < 0){
+    if(bind(sock_fd, (struct sockaddr*)&server_addr, sizeof(server_addr)) < 0){ // Tell the os that any packet coming to this port should be sent to the server socket's buffer
         perror("Error binding socket");
         close(sock_fd);
         exit(1);
     }
     printf("Socket bound\n");
+
+    struct sockaddr_in client_addr;
+    socklen_t client_addr_len = sizeof(client_addr);
 
     return 0;
 }
