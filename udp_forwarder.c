@@ -29,13 +29,20 @@ int main(int argc, char *argv[])
     if(argc != 6)
     {
         printf("Usage: %s <SOURCE_IP> <SOURCE_PORT> <DESTINATION_IP> <DESTINATION_PORT> <LOSS_RATE>\n", argv[0]);
-        return 1;
+        exit(1);
     }
-    
+    // the ports should be between 1024 and 65535
     int source_ip = inet_addr(argv[1]);
     int source_port = atoi(argv[2]);
     int destination_ip = inet_addr(argv[3]);
-    int destiantion_port = atoi(argv[4]);
-    int loss_rate = atoi(argv[5]);
+    int destination_port = atoi(argv[4]);
+    int loss_rate = atoi(argv[5]); // number of the packets out of 1000 that are intentionally dropped (not forwarded)
+    
+    if(source_port  < 1024 || destination_port < 1024 || source_port > 65535 || destination_port > 65535){
+        perror("Invalid port number. Port number should be between 1024 and 65535");
+        exit(1);
+    }
+
+    
     return 0;
 }
