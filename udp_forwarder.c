@@ -17,11 +17,11 @@
  *   Check for errors, and abstract logically separate blocks into separate
  *   functions!
  */
-
+#include <stdio.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <unistd.h>
-
+#include <stdlib.h>
 /* main
  * The main entry point of your program */
 int main(int argc, char *argv[])
@@ -32,6 +32,10 @@ int main(int argc, char *argv[])
         return 1;
     }
     
-    
+    int source_ip = inet_addr(argv[1]);
+    int source_port = atoi(argv[2]);
+    int destination_ip = inet_addr(argv[3]);
+    int destiantion_port = atoi(argv[4]);
+    int loss_rate = atoi(argv[5]);
     return 0;
 }
