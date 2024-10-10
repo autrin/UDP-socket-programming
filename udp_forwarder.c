@@ -78,11 +78,12 @@ int main(int argc, char *argv[])
     srand(time(NULL));
 
     while(1){
-        int recv_len = recvfrom(sock_fd, buffer, sizeof(buffer), 0, (struct sockaddr *)&src_addr, &addr_len);
+        ssize_t  recv_len = recvfrom(sock_fd, buffer, sizeof(buffer), 0, (struct sockaddr *)&src_addr, &addr_len);
         if(recv_len < 0){
             perror("Error receiving data");
             continue;
         }
+        printf("Received %ld bytes\n", recv_len);
 
         // Determine whether to drop the packet based on the loss rate
         int random_value = rand() % 1000;
