@@ -24,11 +24,23 @@
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
+#include <signal.h>
+int sock_fd;
+
+void handle_sigint(int sig) { // check for ctrl + c to close the socket and exit cleanly
+    printf("Caught signal %d\n", sig);
+    close(sock_fd);
+    printf("Socket closed. Exiting...\n");
+    exit(0);
+}
+
 
 /* main
  * The main entry point of your program */
 int main(int argc, char *argv[])
 {
+    // Register signal handler
+    signal(SIGINT, handle_sigint);
     if(argc != 6)
     {
         printf("Usage: %s <SOURCE_IP> <SOURCE_PORT> <DESTINATION_IP> <DESTINATION_PORT> <LOSS_RATE>\n", argv[0]);
@@ -45,7 +57,6 @@ int main(int argc, char *argv[])
         exit(1);
     }
     
-    int sock_fd;
     struct sockaddr_in src_addr, dest_addr;
     char buffer[4096];
     socklen_t addr_len = sizeof(src_addr);
@@ -55,7 +66,8 @@ int main(int argc, char *argv[])
         perror("Error creating socket");
         exit(1);    
     }
-    
+        printf("Socket created\n");
+
     // Configure source address
     memset(&src_addr, 0, sizeof(src_addr));
     src_addr.sin_family = AF_INET;
@@ -68,6 +80,7 @@ int main(int argc, char *argv[])
         close(sock_fd);
         exit(1);
     }
+    printf("Socket bound\n");
 
     // Configure destination address
     memset(&dest_addr, 0, sizeof(dest_addr));
@@ -78,6 +91,7 @@ int main(int argc, char *argv[])
     srand(time(NULL));
 
     while(1){
+        printf("Waiting for data...\n");
         ssize_t  recv_len = recvfrom(sock_fd, buffer, sizeof(buffer), 0, (struct sockaddr *)&src_addr, &addr_len);
         if(recv_len < 0){
             perror("Error receiving data");
@@ -98,6 +112,7 @@ int main(int argc, char *argv[])
             printf("Packet forwarded to %s:%d\n", dest_ip, dest_port);
         }
     }
+
     close(sock_fd);
     return 0;
 }
