@@ -20,7 +20,7 @@ void handle_sigint(int sig) { // check for ctrl + c to close the socket and exit
 }
 
 
-void socket_creation(){
+void socket_init(){
     sock_fd = socket(PF_INET, SOCK_DGRAM, 0); // create a datagram socket (udp)
     if(sock_fd < 0)
     {
@@ -30,6 +30,14 @@ void socket_creation(){
     printf("Socket created\n");
 }
 
+struct sockaddr_in socket_addr_init(){
+    struct sockaddr_in server_addr;
+    server_addr.sin_family = AF_INET;
+    server_addr.sin_addr.s_addr = INADDR_ANY;
+    server_addr.sin_port = htons(PORT);
+    return server_addr;
+}
+
 /* main
  * The main entry point of your program */
 int main(int argc, char *argv[])
@@ -37,11 +45,8 @@ int main(int argc, char *argv[])
     // Register signal handler
     signal(SIGINT, handle_sigint);
 
-    socket_creation();
-    struct sockaddr_in server_addr;
-    server_addr.sin_family = AF_INET;
-    server_addr.sin_addr.s_addr = INADDR_ANY;
-    server_addr.sin_port = htons(PORT);
+    socket_init();
+    struct sockaddr_in server_addr = socket_addr_init();
 
     if(bind(sock_fd, (struct sockaddr*)&server_addr, sizeof(server_addr)) < 0){ // Tell the os that any packet coming to this port should be sent to the server socket's buffer
         perror("Error binding socket");
