@@ -38,6 +38,16 @@ struct sockaddr_in socket_addr_init(){
     return server_addr;
 }
 
+void bind_socket(int sock_fd, struct sockaddr_in *server_addr){
+    if(bind(sock_fd, (struct sockaddr*)&server_addr, sizeof(server_addr)) < 0){ // Tell the os that any packet coming to this port should be sent to the server socket's buffer
+        perror("Error binding socket");
+        close(sock_fd);
+        exit(1);
+    }
+    printf("Socket bound\n");
+}
+
+
 /* main
  * The main entry point of your program */
 int main(int argc, char *argv[])
@@ -47,14 +57,7 @@ int main(int argc, char *argv[])
 
     socket_init();
     struct sockaddr_in server_addr = socket_addr_init();
-
-    if(bind(sock_fd, (struct sockaddr*)&server_addr, sizeof(server_addr)) < 0){ // Tell the os that any packet coming to this port should be sent to the server socket's buffer
-        perror("Error binding socket");
-        close(sock_fd);
-        exit(1);
-    }
-    printf("Socket bound\n");
-
+    bind_socket(sock_fd, &server_addr);
     struct sockaddr_in client_addr;
     socklen_t client_addr_len = sizeof(client_addr);
     char receivedMessage[BUFFER_SIZE];
