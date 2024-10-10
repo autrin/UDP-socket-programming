@@ -44,7 +44,14 @@ int main(int argc, char *argv[])
     
     int sock_fd;
     struct sockaddr_in src_addr, dest_addr;
-    
+    char buffer[4096];
+    socklen_t addr_len = sizeof(src_addr);
+
+    // Create a soket
+    if((sock_fd = socket(AF_INET, SOCK_DGRAM, 0)) < 0){
+        perror("Error creating socket");
+        exit(1);    
+    }
     
     return 0;
 }
