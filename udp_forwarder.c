@@ -53,5 +53,25 @@ int main(int argc, char *argv[])
         exit(1);    
     }
     
+    // Configure source address
+    memset(&src_addr, 0, sizeof(src_addr));
+    src_addr.sin_family = AF_INET;
+    src_addr.sin_addr.s_addr = inet_addr(source_ip);
+    src_addr.sin_port = htons(source_port);
+
+    // Bind socket to the source IP and port
+    if(bind(sock_fd, (struct sockaddr *)&src_addr, sizeof(src_addr)) < 0){
+        perror("Error binding socket");
+        close(sock_fd);
+        exit(1);
+    }
+
+    // Configure destination address
+    memset(&dest_addr, 0, sizeof(dest_addr));
+    dest_addr.sin_family = AF_INET;
+    dest_addr.sin_addr.s_addr = inet_addr(dest_ip);
+    dest_addr.sin_port = htons(dest_port);
+
+
     return 0;
 }
