@@ -22,6 +22,8 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <time.h>
+
 /* main
  * The main entry point of your program */
 int main(int argc, char *argv[])
@@ -72,6 +74,28 @@ int main(int argc, char *argv[])
     dest_addr.sin_addr.s_addr = inet_addr(dest_ip);
     dest_addr.sin_port = htons(dest_port);
 
+    srand(time(NULL));
 
+    while(1){
+        int recv_len = recvfrom(sock_fd, buffer, sizeof(buffer), 0, (struct sockaddr *)&src_addr, &addr_len);
+        if(recv_len < 0){
+            perror("Error receiving data");
+            continue;
+        }
+
+        // Determine whether to drop the packet based on the loss rate
+        int random_value = rand() % 1000;
+        if(random_value < loss_rate){
+            printf("Packet dropped (random value: %d)\n", random_value);
+            continue;
+        }
+
+        if(sendto(sock_fd, buffer, recv_len, 0, (struct sockaddr *)&dest_addr, sizeof(dest_addr)) < 0){
+            perror("Error sending data");
+        }else{
+            printf("Packet forwarded to %s:%d\n", dest_ip, dest_port);
+        }
+    }
+    close(sock_fd);
     return 0;
 }
