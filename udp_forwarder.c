@@ -23,6 +23,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <time.h>
+#include <string.h>
 
 /* main
  * The main entry point of your program */
