@@ -12,7 +12,7 @@ Allows specification of packet loss rate to simulate network unreliability.
 
 Displays statistics about forwarded and dropped packets.
 
-Usage
+## Usage
 
 1. Compile the Program
 
