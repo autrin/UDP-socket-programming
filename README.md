@@ -2,7 +2,7 @@
 
 ## Overview
 
-The UDP Forwarder is a simple program written in C that listens for UDP packets on a specified source IP and port, and forwards them to a destination IP and port. It allows for simulating packet loss, making it a useful tool for testing the behavior of applications under unreliable network conditions.
+The UDP Forwarder is a simple program written in C that listens for UDP packets on a specified source IP and port and forwards them to a destination IP and port. It allows for simulating packet loss, making it a useful tool for testing the behavior of applications under unreliable network conditions, such as streaming or real-time data transmission.
 
 ## Features
 
