@@ -1,42 +1,42 @@
-# CPR E 4890 Lab 3 Skeleton Code
+# UDP Forwarder
+## Overview
+The UDP Forwarder is a simple program written in C that listens for UDP packets on a specified source IP and port, and forwards them to a destination IP and port. It allows for simulating packet loss, making it a useful tool for testing the behavior of applications under unreliable network conditions.
 
-This folder contains a makefile and a template C file. You can compile your
-program using the makefile:
-
-```bash
+## Features
+Forwards UDP packets from a source to a destination.
+Allows specification of packet loss rate to simulate network unreliability.
+Displays statistics about forwarded and dropped packets.
+Usage
+1. Compile the Program
+Use make to compile the program:
 make
-```
 
-and run it with the format:
+2. Run the UDP Forwarder
+Run the UDP forwarder with the following command:
+<SOURCE_IP>: IP address from which the program will receive UDP packets.
+<SOURCE_PORT>: Port on which the program will listen for UDP packets.
+<DESTINATION_IP>: IP address to which the program will forward UDP packets.
+<DESTINATION_PORT>: Port to which the program will forward UDP packets.
+<LOSS_RATE>: The number of packets out of 1000 that will be dropped to simulate packet loss (e.g., 0 for no loss, 10 for 1% loss).
 
-```bash
-./udp-forwarder <SOURCE_IP> <SOURCE_PORT> <DESTINATION_IP> <DESTINATION_PORT> <LOSS_RATE>
-```
+## Example
+./udp_forwarder 127.0.0.1 5000 127.0.0.1 6000 0
+This command will forward all packets from 127.0.0.1:5000 to 127.0.0.1:6000 with no packet loss.
 
-It is up to you to implement the behavior defined by the lab manual (including
-handling arguments).
+3. Streaming Video with VLC (Source)
+To stream a video file using VLC to the source port, use the following command:
+cvlc --repeat test.mp4 --sout '#standard{access=udp,mux=ts,dst=<SOURCE_IP>:<SOURCE_PORT>}'
+Example:
+cvlc --repeat test.mp4 --sout '#standard{access=udp,mux=ts,dst=127.0.0.1:5000}'
 
-By default, almost all errors and warnings will prevent your program from
-compiling. It is generally a good idea to leave this on. However, if you want to
-live dangerously, you may disable this by removing the `Wfatal-errors` compiler
-flag from the makefile.
+4. Receiving the Video Stream with VLC (Destination)
+On the destination machine, run VLC to receive the forwarded video stream:
+vlc -vvv udp://@<DESTINATION_IP>:<DESTINATION_PORT>
 
-## Testing Your Program
+Example:
+vlc -vvv udp://@127.0.0.1:6000
 
-You can use `cvlc` and `vlc` to test your program by using it as follows.
-
-To generate a source video stream directed towards `<SRC_IP>:<SRC_PORT>`:
-
-```bash
-cvlc --repeat test.mp4 --sout '#standard{access=udp,mux=ts,dst=SRC_IP:SRC_PORT}'
-```
-
-To play your video on the receiving address, `<DEST_IP>:<DEST_PORT>`:
-
-```bash
-vlc -vvv udp://@<DEST_IP>:<DEST_PORT>
-```
-
-**IMPORTANT**: `<SRC_PORT>` and `<DEST_PORT>` should be different! Your program
-will receive from `<SRC_PORT>` and send to `<DEST_PORT>`. If they're the same,
-you will be circumventing your program entirely.
+Requirements
+GCC compiler
+Linux environment
+VLC media player (for testing UDP streaming)
