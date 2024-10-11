@@ -19,7 +19,7 @@ Run the UDP forwarder with the following command:
 <DESTINATION_PORT>: Port to which the program will forward UDP packets.
 <LOSS_RATE>: The number of packets out of 1000 that will be dropped to simulate packet loss (e.g., 0 for no loss, 10 for 1% loss).
 
-## Example
+Example
 ./udp_forwarder 127.0.0.1 5000 127.0.0.1 6000 0
 This command will forward all packets from 127.0.0.1:5000 to 127.0.0.1:6000 with no packet loss.
 
