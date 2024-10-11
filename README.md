@@ -59,7 +59,7 @@ Example:
 
 vlc -vvv udp://@127.0.0.1:6000
 
-Requirements
+## Requirements
 
 GCC compiler
 
